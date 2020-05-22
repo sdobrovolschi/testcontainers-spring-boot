@@ -34,16 +34,24 @@ public class EmbeddedMongodbBootstrapConfiguration {
             ConfigurableEnvironment environment,
             MongodbProperties properties,
             MongodbStatusCheck mongodbStatusCheck) {
-        GenericContainer mongodb =
-                new GenericContainer<>(properties.getDockerImage())
-                        .withEnv("MONGO_INITDB_ROOT_USERNAME", properties.getUsername())
-                        .withEnv("MONGO_INITDB_ROOT_PASSWORD", properties.getPassword())
-                        .withEnv("MONGO_INITDB_DATABASE", properties.getDatabase())
-                        .withExposedPorts(properties.getPort())
-                        .waitingFor(mongodbStatusCheck);
+
+        GenericContainer mongodb = mongodb(properties, mongodbStatusCheck);
 
         mongodb = configureCommonsAndStart(mongodb, properties, log);
         registerMongodbEnvironment(mongodb, environment, properties);
+        return mongodb;
+    }
+
+    private MongoDBContainer mongodb(MongodbProperties properties, MongodbStatusCheck mongodbStatusCheck) {
+        MongoDBContainer mongodb = new MongoDBContainer(properties.getDockerImage())
+                .withEnv("MONGO_INITDB_DATABASE", properties.getDatabase())
+                .withExposedPorts(properties.getPort())
+                .waitingFor(mongodbStatusCheck);
+
+        if (properties.getUsername() != null && properties.getPassword() != null) {
+            mongodb.withRootCredentials(properties.getUsername(), properties.getPassword());
+        }
+
         return mongodb;
     }
 
