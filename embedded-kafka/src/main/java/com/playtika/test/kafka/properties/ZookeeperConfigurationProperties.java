@@ -11,6 +11,8 @@ import static java.lang.String.format;
 @EqualsAndHashCode(callSuper = true)
 @ConfigurationProperties("embedded.zookeeper")
 public class ZookeeperConfigurationProperties extends CommonContainerProperties {
+
+    protected String zookeeperConnect;
     protected int zookeeperContainerPort = 2181;
     protected String zookeeperContainerHost = "localhost";
 
@@ -23,7 +25,7 @@ public class ZookeeperConfigurationProperties extends CommonContainerProperties 
         private String txnLogsFolder = "target/embedded-zk-txn-logs";
     }
 
-    public String getZookeeperConnect() {
+    public String getZookeeperInternalConnect() {
         return format("%s:%d", getZookeeperContainerHost(), getZookeeperContainerPort());
     }
 }
