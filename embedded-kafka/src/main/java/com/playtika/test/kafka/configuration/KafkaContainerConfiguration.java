@@ -132,7 +132,8 @@ public class KafkaContainerConfiguration {
                 .withCopyFileToContainer(MountableFile.forClasspathResource("kafka_server_jaas.conf"), "/etc/kafka/kafka_server_jaas.conf")
                 .withEnv("KAFKA_OPTS", "-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf")
                 .withEnv("KAFKA_GC_LOG_OPTS", "-Dnogclog")
-                .withExposedPorts(kafkaInternalPort, kafkaExternalPort, saslPlaintextKafkaExternalPort, KAFKA_PORT)
+                .withExposedPorts(kafkaInternalPort, kafkaExternalPort, saslPlaintextKafkaExternalPort, KAFKA_PORT,
+                        zookeeperProperties.getZookeeperContainerPort())
                 .withNetwork(network)
                 .withNetworkAliases(KAFKA_HOST_NAME)
                 .withExtraHost(KAFKA_HOST_NAME, "127.0.0.1")
@@ -142,7 +143,7 @@ public class KafkaContainerConfiguration {
         zookeperFileSystemBind(zookeeperProperties, kafka);
 
         kafka = (KafkaContainer) configureCommonsAndStart(kafka, kafkaProperties, log);
-        registerKafkaEnvironment(kafka, environment, kafkaProperties);
+        registerKafkaEnvironment(kafka, environment, kafkaProperties, zookeeperProperties);
         return kafka;
     }
 
@@ -178,7 +179,8 @@ public class KafkaContainerConfiguration {
 
     private void registerKafkaEnvironment(GenericContainer kafka,
                                           ConfigurableEnvironment environment,
-                                          KafkaConfigurationProperties kafkaProperties) {
+                                          KafkaConfigurationProperties kafkaProperties,
+                                          ZookeeperConfigurationProperties zookeeperProperties) {
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
 
         String host = kafka.getContainerIpAddress();
@@ -195,6 +197,10 @@ public class KafkaContainerConfiguration {
         Integer containerPort = kafkaProperties.getContainerBrokerPort();
         String kafkaBrokerListForContainers = format("%s:%d", KAFKA_HOST_NAME, containerPort);
         map.put("embedded.kafka.containerBrokerList", kafkaBrokerListForContainers);
+
+        Integer mappedZookeeperPort = kafka.getMappedPort(zookeeperProperties.getZookeeperContainerPort());
+        String zookeeperConnect = String.format("%s:%d", host, mappedZookeeperPort);
+        map.put("embedded.zookeeper.zookeeperConnect", zookeeperConnect);
 
         MapPropertySource propertySource = new MapPropertySource("embeddedKafkaInfo", map);
 

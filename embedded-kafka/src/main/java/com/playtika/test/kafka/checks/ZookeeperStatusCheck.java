@@ -41,7 +41,7 @@ public class ZookeeperStatusCheck extends AbstractCommandWaitStrategy {
         return new String[]{
                 "cub",
                 "zk-ready",
-                properties.getZookeeperConnect(),
+                properties.getZookeeperInternalConnect(),
                 TIMEOUT_IN_SEC
         };
     }

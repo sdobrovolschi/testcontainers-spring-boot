@@ -61,7 +61,7 @@ public class KafkaTopicsConfigurer {
     }
 
     private void createTopic(String topic) {
-        String[] createTopicCmd = getCreateTopicCmd(topic, zookeeperProperties.getZookeeperConnect());
+        String[] createTopicCmd = getCreateTopicCmd(topic, zookeeperProperties.getZookeeperInternalConnect());
         Container.ExecResult execResult = executeInContainer(this.kafka, createTopicCmd);
         log.debug("Topic={} creation cmd='{}' execResult={}", topic, createTopicCmd, execResult);
     }
@@ -70,8 +70,8 @@ public class KafkaTopicsConfigurer {
         if (!topics.isEmpty()) {
             log.info("Creating ACLs for Kafka topics: {}", topics);
             for (String topic : topics) {
-                String[] topicConsumerACLsCmd = getTopicConsumerACLCmd(username, topic, zookeeperProperties.getZookeeperConnect());
-                String[] topicProducerACLsCmd = getTopicProducerACLCmd(username, topic, zookeeperProperties.getZookeeperConnect());
+                String[] topicConsumerACLsCmd = getTopicConsumerACLCmd(username, topic, zookeeperProperties.getZookeeperInternalConnect());
+                String[] topicProducerACLsCmd = getTopicProducerACLCmd(username, topic, zookeeperProperties.getZookeeperInternalConnect());
                 Container.ExecResult topicConsumerACLsOutput = executeInContainer(this.kafka, topicConsumerACLsCmd);
                 Container.ExecResult topicProducerACLsOutput = executeInContainer(this.kafka, topicProducerACLsCmd);
                 log.debug("Topic={} consumer ACLs cmd='{}' execResult={}, producer ACLs cmd='{}' execResult={}",
