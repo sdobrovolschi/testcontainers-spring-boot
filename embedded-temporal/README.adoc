@@ -1,0 +1,27 @@
+=== embedded-temporal
+
+==== Maven dependency
+
+.pom.xml
+[source,xml]
+----
+<dependency>
+    <groupId>com.playtika.testcontainers</groupId>
+    <artifactId>embedded-temporal</artifactId>
+    <scope>test</scope>
+</dependency>
+----
+
+==== Consumes (via `bootstrap.properties`)
+
+* `embedded.temporal.enabled` `(true|false, default is true)`
+* `embedded.temporal.reuseContainer` `(true|false, default is false)`
+* `embedded.temporal.cliVersion` `(default is '1.3.0')`
+** Temporal CLI versions on https://github.com/temporalio/cli/releases
+
+==== Produces
+
+* `embedded.temporal.host`
+* `embedded.temporal.port`
+* `embedded.temporal.networkAlias`
+* `embedded.temporal.internalPort`

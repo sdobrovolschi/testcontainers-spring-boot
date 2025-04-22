@@ -1,0 +1,61 @@
+{
+  "groups": [
+  ],
+  "properties": [
+    {
+      "name": "embedded.temporal.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enables or disables the Temporal container.",
+      "defaultValue": "true"
+    },
+    {
+      "name": "embedded.temporal.cli-version",
+      "type": "java.lang.String",
+      "description": "The Temporal CLI version.",
+      "defaultValue": "1.3.0"
+    },
+    {
+      "name": "embedded.temporal.ui-enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enables or disables the Temporal UI.",
+      "defaultValue": "false"
+    }
+  ],
+  "hints": [
+    {
+      "name": "embedded.temporal.enabled",
+      "values": [
+        {
+          "value": "true",
+          "description": "Enables the Temporal container."
+        },
+        {
+          "value": "false",
+          "description": "Disables the Temporal container."
+        }
+      ]
+    },
+    {
+      "name": "embedded.temporal.cli-version",
+      "values": [
+        {
+          "value": "1.3.0",
+          "description": "Default Temporal CLI Ref https://github.com/temporalio/cli/releases for further info."
+        }
+      ]
+    },
+    {
+      "name": "embedded.temporal.ui-enabled",
+      "values": [
+        {
+          "value": "true",
+          "description": "Enables the Temporal UI."
+        },
+        {
+          "value": "false",
+          "description": "Disables the Temporal UI."
+        }
+      ]
+    }
+  ]
+}
